@@ -18,14 +18,19 @@ pipeline {
         stage ("deploy metrics server"){
                steps { 
                 sh '''
-                  kubectl apply -f *.yaml
+                  kubectl apply -f aggregated-metrics-reader.yaml
+                  kubectl apply -f auth-delegator.yaml
+                  kubectl apply -f auth-reader.yaml
+                  kubectl apply -f metrics-apiservice.yaml
+                  kubectl apply -f metrics-server-deployment.yaml
+                  kubectl apply -f metrics-server-service.yaml
                 '''
                }
         }
         stage ("check"){
                steps { 
                 sh '''
-                  count=7; 
+                  count=10; 
                   while [ $(kubectl get pods -l k8s-app=metrics-server -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" -o $count -eq 0 ]; do 
                     echo "waiting for pod"
                     sleep 1
