@@ -24,6 +24,7 @@ pipeline {
                   kubectl apply -f metrics-apiservice.yaml
                   kubectl apply -f metrics-server-deployment.yaml
                   kubectl apply -f metrics-server-service.yaml
+                  kubectl apply -f resource-reader.yaml
                 '''
                }
         }
